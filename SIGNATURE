@@ -1,0 +1,55 @@
+This file contains message digests of all files listed in MANIFEST,
+signed via the Module::Signature module, version 0.55.
+
+To verify the content in this distribution, first make sure you have
+Module::Signature installed, then type:
+
+    % cpansign -v
+
+It will check each file's integrity, as well as the signature's
+validity.  If "==> Signature verified OK! <==" is not displayed,
+the distribution may already have been compromised, and you should
+not run its Makefile.PL or Build.PL.
+
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+SHA1 821e81e1300d596ed7195035e2a0a071da0716fd .cvsignore
+SHA1 9fd63a6e68d2ad30954058270cf1ddb514cde017 Build.PL
+SHA1 3096e29902015f37d6748585e0f05067a44d95d8 Changes
+SHA1 5374ab5e9a9fb4ea8a8c7bba43fd095b8f9ea208 MANIFEST
+SHA1 5b76f220d2e78e23ed359785795e80f1d8de0190 META.yml
+SHA1 684ab827ae5405876abe203f5a032ffa6b575cf7 Makefile.PL
+SHA1 16fd9799153de784c5bb038fdec09c7e97dc1996 README
+SHA1 cc1dd814064d84ffd97f510eaff149a01315b0eb lib/Math/.cvsignore
+SHA1 41f031fdaec2f1581b7e2131cc5b0380c0a3d551 lib/Math/Decimal.pm
+SHA1 4f84ea4776fe36272b5f82622ef648a3f9b5fc05 lib/Math/Decimal.xs
+SHA1 14c26162d42af7c9226f226b0a4ba0f8be68b324 t/NumForms.pm
+SHA1 43c812c97cdcc46169a7026d4810a328559e297b t/add.t
+SHA1 23923a55518d16fc764cf4619a8ed002c09b5768 t/add_pp.t
+SHA1 06ab38697be5b8dd7c3e14945aaaaa352a218dba t/canon.t
+SHA1 76a977b7f9cb96cc0378f5734fa24caa695f8b37 t/canon_pp.t
+SHA1 3843c571f11302c66375cb826cc02892c57a9181 t/classify.t
+SHA1 22c8bb9af38f3eaa604350884e3fcc9c200b5f1b t/classify_pp.t
+SHA1 e57e9d0f442b9a57a17a6ce0d91c9284cfc01e85 t/cmp.t
+SHA1 db70d84432641bc8e2718e33fb123011e472ff89 t/cmp_pp.t
+SHA1 03c3686a0d3b208502ae0239ce56f69227ab6eee t/error.t
+SHA1 fc008cb61eb02798d6ec02df230ef4d59bcdca12 t/error_pp.t
+SHA1 da17256b0f5992710aa91dedd892fefcccdb603c t/mul.t
+SHA1 c991dd834207e9658d9387c1d3e355b0e3e94e50 t/mul_pp.t
+SHA1 0e141eecf3ca4903ef38d9413b5403a9ddb0392f t/pod_cvg.t
+SHA1 74a957cd8b93f25672ecc6aa578a671d084dd343 t/pod_syn.t
+SHA1 b64377867d2c501a74f0d7cc2d2cf916c71561b3 t/pow10.t
+SHA1 5a62612ea40a7914c59291c05d142f5c0c459364 t/pow10_pp.t
+SHA1 64683aee41a1d28fc4e008c24574319288147da7 t/rndiv.t
+SHA1 acb421ef50912bf8cbebddc34d36fac3e2c853a2 t/rndiv_pp.t
+SHA1 39c82338db97f34ec74795c9141a4f04967f6f46 t/setup_pp.pl
+SHA1 01a337a5516e9e5b21a3eedf95fec7ba4450a60a t/sign.t
+SHA1 6a157acdd2db96f4c5374a9c954aac05ed8ed3e5 t/sign_pp.t
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.9 (GNU/Linux)
+
+iEYEARECAAYFAkoLTQ4ACgkQOV9mt2VyAVFruQCeNgcX5GUDOoYC5tzELeiqaZjJ
+IksAn2AwARZp43IfJ7QN9cATaVAEcg2T
+=fMq+
+-----END PGP SIGNATURE-----
