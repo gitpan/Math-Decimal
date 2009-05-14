@@ -1,3 +1,11 @@
+version 0.001; 2009-05-14
+
+  * bugfix: division/rounding misparsed inputs with magnitude less than
+    one and so gave grossly incorrect results
+
+  * don't bother with variant input forms in t/rndiv.t, where both
+    implementations cleanly canonicalise all inputs
+
 version 0.000; 2009-05-13
 
   * initial released version

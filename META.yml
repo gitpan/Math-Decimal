@@ -1,6 +1,6 @@
 ---
 name: Math-Decimal
-version: 0.000
+version: 0.001
 author:
   - 'Andrew Main (Zefram) <zefram@fysh.org>'
 abstract: arithmetic in decimal
@@ -28,7 +28,7 @@ dynamic_config: 1
 provides:
   Math::Decimal:
     file: lib/Math/Decimal.pm
-    version: 0.000
+    version: 0.001
 generated_by: Module::Build version 0.31012
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.2.html

@@ -170,7 +170,7 @@ use strict;
 use Carp qw(croak);
 use Params::Classify 0.000 qw(is_string);
 
-our $VERSION = "0.000";
+our $VERSION = "0.001";
 
 use parent "Exporter";
 our @EXPORT_OK = qw(
@@ -640,10 +640,10 @@ unless(defined &dec_rndiv_and_rem) { { local $SIG{__DIE__}; eval q{
 sub _nonneg_rndiv_and_rem_twz($$) {
 	croak "division by zero" if $_[1] eq "0";
 	return ("0", "0") if $_[0] eq "0";
-	$_[0] =~ /\A(?:[1-9]([0-9]*)|0\.([0-9]*[1-9]))/;
-	my $a_expt = defined($1) ? length($1) : -length($2);
-	$_[1] =~ /\A(?:[1-9]([0-9]*)|0\.([0-9]*[1-9]))/;
-	my $b_expt = defined($1) ? length($1) : -length($2);
+	$_[0] =~ /\A(?:[1-9]([0-9]*)|0\.(0*)[1-9])/;
+	my $a_expt = defined($1) ? length($1) : -1-length($2);
+	$_[1] =~ /\A(?:[1-9]([0-9]*)|0\.(0*)[1-9])/;
+	my $b_expt = defined($1) ? length($1) : -1-length($2);
 	my $q = "0";
 	my $r = $_[0];
 	for(my $s = $a_expt-$b_expt; $s >= 0; $s--) {
