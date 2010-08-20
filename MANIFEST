@@ -22,6 +22,7 @@ t/error_pp.t
 t/mul.t
 t/mul_pp.t
 t/pod_cvg.t
+t/pod_cvg_pp.t
 t/pod_syn.t
 t/pow10.t
 t/pow10_pp.t

@@ -1,5 +1,5 @@
 This file contains message digests of all files listed in MANIFEST,
-signed via the Module::Signature module, version 0.55.
+signed via the Module::Signature module, version 0.64.
 
 To verify the content in this distribution, first make sure you have
 Module::Signature installed, then type:
@@ -14,16 +14,16 @@ not run its Makefile.PL or Build.PL.
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA1
 
-SHA1 821e81e1300d596ed7195035e2a0a071da0716fd .cvsignore
-SHA1 58179932ec23655b29f3763340213dc6b6f5eec4 Build.PL
-SHA1 3c1dbd100e9c2363030a0c96ad7f3fe6d2e7779a Changes
-SHA1 5374ab5e9a9fb4ea8a8c7bba43fd095b8f9ea208 MANIFEST
-SHA1 ff0952bfcefb78f82bcb5f2d9a271fc9fdab3f0f META.yml
-SHA1 684ab827ae5405876abe203f5a032ffa6b575cf7 Makefile.PL
-SHA1 16fd9799153de784c5bb038fdec09c7e97dc1996 README
+SHA1 f00521f5f8f39e687178f90acdc956d8da77768c .cvsignore
+SHA1 b6d592686cd018b9f26e8e1df2d884a34791edf1 Build.PL
+SHA1 2da59a7c85c36a1ade55ace18b2b47b62ae6ec1f Changes
+SHA1 9939c51e8741051c4fa425077b1a2c9eeff24fc1 MANIFEST
+SHA1 589a061bf802c2329b92a32a8e3dc0ddffa58c67 META.yml
+SHA1 0f1b3b6269550b5135e10b3cae1b6b41d274b276 Makefile.PL
+SHA1 71ea28c647a0f086c73dc8d7344982396ac05077 README
 SHA1 cc1dd814064d84ffd97f510eaff149a01315b0eb lib/Math/.cvsignore
-SHA1 807e72d224499fc13dfb4f18f17724333d5c2402 lib/Math/Decimal.pm
-SHA1 4f84ea4776fe36272b5f82622ef648a3f9b5fc05 lib/Math/Decimal.xs
+SHA1 78062fba67d4f7f0b354d491b954e421eaa473c7 lib/Math/Decimal.pm
+SHA1 ef2539a433cbc13c4ae83a9fb23f06ef191ff77d lib/Math/Decimal.xs
 SHA1 14c26162d42af7c9226f226b0a4ba0f8be68b324 t/NumForms.pm
 SHA1 43c812c97cdcc46169a7026d4810a328559e297b t/add.t
 SHA1 23923a55518d16fc764cf4619a8ed002c09b5768 t/add_pp.t
@@ -31,25 +31,26 @@ SHA1 06ab38697be5b8dd7c3e14945aaaaa352a218dba t/canon.t
 SHA1 76a977b7f9cb96cc0378f5734fa24caa695f8b37 t/canon_pp.t
 SHA1 3843c571f11302c66375cb826cc02892c57a9181 t/classify.t
 SHA1 22c8bb9af38f3eaa604350884e3fcc9c200b5f1b t/classify_pp.t
-SHA1 e57e9d0f442b9a57a17a6ce0d91c9284cfc01e85 t/cmp.t
+SHA1 22faf05c7190c244e96f8305405831f306eb442d t/cmp.t
 SHA1 db70d84432641bc8e2718e33fb123011e472ff89 t/cmp_pp.t
 SHA1 03c3686a0d3b208502ae0239ce56f69227ab6eee t/error.t
 SHA1 fc008cb61eb02798d6ec02df230ef4d59bcdca12 t/error_pp.t
 SHA1 da17256b0f5992710aa91dedd892fefcccdb603c t/mul.t
 SHA1 c991dd834207e9658d9387c1d3e355b0e3e94e50 t/mul_pp.t
-SHA1 0e141eecf3ca4903ef38d9413b5403a9ddb0392f t/pod_cvg.t
-SHA1 74a957cd8b93f25672ecc6aa578a671d084dd343 t/pod_syn.t
+SHA1 904d9a4f76525e2303e4b0c168c68230f223c8de t/pod_cvg.t
+SHA1 3f447b1d0b8a6247c3a311087f8d66da1c3ca5db t/pod_cvg_pp.t
+SHA1 65c75abdef6f01a5d1588a307f2ddfe2333dc961 t/pod_syn.t
 SHA1 b64377867d2c501a74f0d7cc2d2cf916c71561b3 t/pow10.t
 SHA1 5a62612ea40a7914c59291c05d142f5c0c459364 t/pow10_pp.t
 SHA1 77dbd34467e1e71166a3b29a663c6d8d2c27fe7e t/rndiv.t
 SHA1 acb421ef50912bf8cbebddc34d36fac3e2c853a2 t/rndiv_pp.t
 SHA1 39c82338db97f34ec74795c9141a4f04967f6f46 t/setup_pp.pl
-SHA1 01a337a5516e9e5b21a3eedf95fec7ba4450a60a t/sign.t
+SHA1 00426d3f1de360e177102cb15a22e70274bfe864 t/sign.t
 SHA1 6a157acdd2db96f4c5374a9c954aac05ed8ed3e5 t/sign_pp.t
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.4.9 (GNU/Linux)
 
-iEYEARECAAYFAkoMcaIACgkQOV9mt2VyAVF19QCff9pCc40IjkmydW95PCALP7HT
-lIgAmwSoETsIe3O/+/e+pPUaPwkkzVNE
-=UsRZ
+iEYEARECAAYFAkxvAgwACgkQOV9mt2VyAVH48gCfdugumK2pQIRw+jU8nW1A389Z
+YE4AoJivFapkfP43sqhQjtGjf1CTcRU4
+=HRu8
 -----END PGP SIGNATURE-----

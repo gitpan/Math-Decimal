@@ -164,13 +164,14 @@ general rounding purposes.
 
 package Math::Decimal;
 
+{ use 5.006; }
 use warnings;
 use strict;
 
 use Carp qw(croak);
 use Params::Classify 0.000 qw(is_string);
 
-our $VERSION = "0.001";
+our $VERSION = "0.002";
 
 use parent "Exporter";
 our @EXPORT_OK = qw(
@@ -325,14 +326,25 @@ sub dec_canonise($) {
 Returns +1 if the argument is positive, 0 if the argument is zero,
 or -1 if the argument is negative.
 
+The value returned is not just a string, as usual for this module, but
+has also been subjected to Perl's implicit numerification.  This is
+necessary for it to be an acceptable comparison value in a C<sort>
+operation, on Perls prior to 5.11.0, due to perl bug #69384.
+
 =cut
+
+my @sgn_result = ("-1", "0", "1");
+foreach(@sgn_result) {
+	no warnings "void";
+	$_ + 0;
+}
 
 unless(defined &dec_sgn) { { local $SIG{__DIE__}; eval q{
 sub dec_sgn($) {
 	croak "not a decimal number" unless &is_string;
 	$_[0] =~ /\A(?:(-)|\+?)0*(?:0(?:\.0+)?()|[0-9]+(?:\.[0-9]+)?)\z/
 		or croak "not a decimal number";
-	return defined($2) ? "0" : defined($1) ? "-1" : "1";
+	return $sgn_result[defined($2) ? 1 : defined($1) ? 0 : 2];
 }
 }; } die $@ if $@ ne "" }
 
@@ -351,10 +363,15 @@ sub dec_abs($) {
 }
 }; } die $@ if $@ ne "" }
 
-=item dec_cmp(A)
+=item dec_cmp(A, B)
 
-Arithmetic comparison.  Returns -1, 0, or +1, indicating whether A is
-less than, equal to, or greater than B.
+Arithmetic comparison.  Returns -1, 0, or +1, indicating whether I<A> is
+less than, equal to, or greater than I<B>.
+
+The value returned is not just a string, as usual for this module, but
+has also been subjected to Perl's implicit numerification.  This is
+necessary for it to be an acceptable comparison value in a C<sort>
+operation, on Perls prior to 5.11.0, due to perl bug #69384.
 
 =cut
 
@@ -368,8 +385,10 @@ my %sgn_cmp = (
 	"-+" => "-1",
 	"-0" => "-1",
 );
-
-my @cmp_result = ("-1", "0", "1");
+foreach(values %sgn_cmp) {
+	no warnings "void";
+	$_ + 0;
+}
 
 sub dec_cmp($$) {
 	croak "not a decimal number"
@@ -398,7 +417,7 @@ sub dec_cmp($$) {
 		$bf .= "0" x $ld;
 	}
 	($ai, $af, $bi, $bf) = ($bi, $bf, $ai, $af) if $as eq "-";
-	return $cmp_result[($ai.$af cmp $bi.$bf) + 1];
+	return $sgn_result[($ai.$af cmp $bi.$bf) + 1];
 }
 }; } die $@ if $@ ne "" }
 
@@ -521,8 +540,8 @@ sub dec_sub($$) { dec_add($_[0], dec_neg($_[1])) }
 =item dec_pow10(A)
 
 Power of ten: returns 10^A.
-A must be an integer value (though it has the usual decimal syntax).
-C<die>s if A is too large for Perl to handle the result.
+I<A> must be an integer value (though it has the usual decimal syntax).
+C<die>s if I<A> is too large for Perl to handle the result.
 
 =cut
 
@@ -555,8 +574,8 @@ sub dec_pow10($) {
 =item dec_mul_pow10(A, B)
 
 Digit shifting: returns A * 10^B.
-B must be an integer value (though it has the usual decimal syntax).
-C<die>s if B is too large for Perl to handle the result.
+I<B> must be an integer value (though it has the usual decimal syntax).
+C<die>s if I<B> is too large for Perl to handle the result.
 
 =cut
 
@@ -627,11 +646,12 @@ sub dec_mul($$) {
 
 =item dec_rndiv_and_rem(MODE, A, B)
 
-Rounding division: returns a list of two items, the quotient (Q) and
-remainder (R) from the division of A by B.  The quotient is by definition
+Rounding division: returns a list of two items, the quotient (I<Q>) and
+remainder (I<R>) from the division of I<A> by I<B>.
+The quotient is by definition
 integral, and the quantities are related by the equation Q*B + R = A.
-I<MODE> controls the rounding mode, which determines which integer Q is
-when R is non-zero.
+I<MODE> controls the rounding mode, which determines which integer I<Q> is
+when I<R> is non-zero.
 
 =cut
 
@@ -716,9 +736,10 @@ sub dec_rndiv_and_rem($$$) {
 
 =item dec_rndiv(MODE, A, B)
 
-Rounding division: returns the quotient (Q) from the division of A by B.
+Rounding division: returns the quotient (I<Q>)
+from the division of I<A> by I<B>.
 The quotient is by definition integral, and approximates A/B.  I<MODE>
-controls the rounding mode, which determines which integer Q is when it
+controls the rounding mode, which determines which integer I<Q> is when it
 can't be exactly A/B.
 
 =cut
@@ -732,11 +753,11 @@ sub dec_rndiv($$$) {
 
 =item dec_round_and_rem(MODE, A, B)
 
-Rounding: returns a list of two items, the rounded value (V) and remainder
-(R) from the rounding of A to a multiple of B.  The rounded value is
-an exact multiple of B, and the quantities are related by the equation
+Rounding: returns a list of two items, the rounded value (I<V>) and remainder
+(I<R>) from the rounding of I<A> to a multiple of I<B>.  The rounded value is
+an exact multiple of I<B>, and the quantities are related by the equation
 V + R = A.  I<MODE> controls the rounding mode, which determines which
-multiple of B V is when R is non-zero.
+multiple of I<B> I<V> is when I<R> is non-zero.
 
 =cut
 
@@ -749,10 +770,10 @@ sub dec_round_and_rem($$$) {
 
 =item dec_round(MODE, A, B)
 
-Rounding: returns the rounded value (V) from the rounding of A to
-a multiple of B.  The rounded value is an exact multiple of B, and
-approximates A.  I<MODE> controls the rounding mode, which determines
-which multiple of B V is when it can't be exactly A.
+Rounding: returns the rounded value (I<V>) from the rounding of I<A> to
+a multiple of I<B>.  The rounded value is an exact multiple of I<B>, and
+approximates I<A>.  I<MODE> controls the rounding mode, which determines
+which multiple of I<B> I<V> is when it can't be exactly I<A>.
 
 =cut
 
@@ -765,9 +786,10 @@ sub dec_round($$$) {
 
 =item dec_rem(MODE, A, B)
 
-Remainder: returns the remainder (R) from the division of A by B.
-R differs from A by an exact multiple of B.  I<MODE> controls the rounding
-mode, which determines which quotient is used when R is non-zero.
+Remainder: returns the remainder (I<R>) from the division of I<A> by I<B>.
+I<R> differs from I<A> by an exact multiple of I<B>.
+I<MODE> controls the rounding
+mode, which determines which quotient is used when I<R> is non-zero.
 
 =cut
 
@@ -795,7 +817,7 @@ Andrew Main (Zefram) <zefram@fysh.org>
 
 =head1 COPYRIGHT
 
-Copyright (C) 2009 Andrew Main (Zefram) <zefram@fysh.org>
+Copyright (C) 2009, 2010 Andrew Main (Zefram) <zefram@fysh.org>
 
 =head1 LICENSE
 

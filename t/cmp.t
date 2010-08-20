@@ -1,7 +1,7 @@
 use warnings;
 use strict;
 
-use Test::More tests => 62209;
+use Test::More tests => 62210;
 use t::NumForms qw(num_forms);
 
 BEGIN { $SIG{__WARN__} = sub { die "WARNING: $_[0]" }; }
@@ -25,5 +25,8 @@ for(my $ia = @values; $ia--; ) { for(my $ib = @values; $ib--; ) {
 		is dec_max($af, $bf), $cmp_expect eq "1" ? $a : $b;
 	} }
 } }
+
+is_deeply [ sort { dec_cmp($a, $b) } qw(-99.31 99.309 -100.1 0 100) ],
+	[ qw(-100.1 -99.31 0 99.309 100) ];
 
 1;

@@ -1,3 +1,4 @@
+{ use 5.006; }
 use warnings;
 use strict;
 
@@ -35,6 +36,15 @@ Module::Build->subclass(code => q{
 })->new(
 	module_name => "Math::Decimal",
 	license => "perl",
+	configure_requires => {
+		"Module::Build" => 0,
+		"perl" => "5.006",
+		"strict" => 0,
+		"warnings" => 0,
+	},
+	configure_recommends => {
+		"ExtUtils::CBuilder" => "0.15",
+	},
 	build_requires => {
 		"Module::Build" => 0,
 		"Params::Classify" => 0,
@@ -58,10 +68,11 @@ Module::Build->subclass(code => q{
 	recommends => {
 		"XSLoader" => 0,
 	},
+	needs_compiler => 0,
 	dynamic_config => 1,
 	meta_add => { distribution_type => "module" },
 	create_makefile_pl => "passthrough",
 	sign => 1,
 )->create_build_script;
 
-exit 0;
+1;

@@ -1,7 +1,7 @@
 use warnings;
 use strict;
 
-use Test::More tests => 649;
+use Test::More tests => 650;
 use t::NumForms qw(num_forms);
 
 BEGIN { $SIG{__WARN__} = sub { die "WARNING: $_[0]" }; }
@@ -32,5 +32,8 @@ foreach(
 		is dec_neg($_), $neg;
 	}
 }
+
+is_deeply [ sort { dec_sgn($a - $b) } (5, -3, 2, -20) ],
+	[ -20, -3, 2, 5 ];
 
 1;

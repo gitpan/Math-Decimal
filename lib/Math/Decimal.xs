@@ -1,16 +1,35 @@
+#define PERL_NO_GET_CONTEXT 1
 #include "EXTERN.h"
 #include "perl.h"
 #include "XSUB.h"
 
+#define PERL_VERSION_DECIMAL(r,v,s) (r*1000000 + v*1000 + s)
+#define PERL_DECIMAL_VERSION \
+	PERL_VERSION_DECIMAL(PERL_REVISION,PERL_VERSION,PERL_SUBVERSION)
+#define PERL_VERSION_GE(r,v,s) \
+	(PERL_DECIMAL_VERSION >= PERL_VERSION_DECIMAL(r,v,s))
+
+#ifndef newSVpvs
+# define newSVpvs(string) newSVpvn(""string"", sizeof(string)-1)
+#endif /* !newSVpvs */
+
 /* parameter classification */
 
+#define sv_is_glob(sv) (SvTYPE(sv) == SVt_PVGV)
+
+#if PERL_VERSION_GE(5,11,0)
+# define sv_is_regexp(sv) (SvTYPE(sv) == SVt_REGEXP)
+#else /* <5.11.0 */
+# define sv_is_regexp(sv) 0
+#endif /* <5.11.0 */
+
 #define sv_is_string(sv) \
-	(SvTYPE(sv) != SVt_PVGV && \
+	(!sv_is_glob(sv) && !sv_is_regexp(sv) && \
 	 (SvFLAGS(sv) & (SVf_IOK|SVf_NOK|SVf_POK|SVp_IOK|SVp_NOK|SVp_POK)))
 
 /* fixed strings for important numbers */
 
-static char *signum_string[3] = { "-1", "0", "1" };
+static SV *signum_sv[3];
 
 /* exceptions */
 
@@ -53,7 +72,8 @@ struct decimal {
 	char *frac_start, *frac_end;
 };
 
-static void read_canonical(struct decimal *r, SV *r_sv)
+#define read_canonical(r, r_sv) THX_read_canonical(aTHX_ r, r_sv)
+static void THX_read_canonical(pTHX_ struct decimal *r, SV *r_sv)
 {
 	STRLEN len;
 	char *p, *end, c, *q;
@@ -90,7 +110,8 @@ static void read_canonical(struct decimal *r, SV *r_sv)
 		r->signum = 0;
 }
 
-static SV *canonical_write(struct decimal *r)
+#define canonical_write(r) THX_canonical_write(aTHX_ r)
+static SV *THX_canonical_write(pTHX_ struct decimal *r)
 {
 	STRLEN len;
 	char *p;
@@ -140,7 +161,8 @@ static void identity_canonical(struct decimal *a)
  * trimmed outputs.
  */
 
-static int canonical_get_expt(struct decimal *a)
+#define canonical_get_expt(a) THX_canonical_get_expt(aTHX_ a)
+static int THX_canonical_get_expt(pTHX_ struct decimal *a)
 {
 	char *p, *q;
 	int val;
@@ -195,7 +217,9 @@ static int canonical_cmp_value(struct decimal *a, struct decimal *b)
 	}
 }
 
-static void canonical_add_magnitude(struct decimal *r,
+#define canonical_add_magnitude(r, a, b) \
+	THX_canonical_add_magnitude(aTHX_ r, a, b)
+static void THX_canonical_add_magnitude(pTHX_ struct decimal *r,
 	struct decimal *a, struct decimal *b)
 {
 	int carry;
@@ -263,7 +287,9 @@ static void canonical_add_magnitude(struct decimal *r,
 	*--rp = '0' + carry;
 }
 
-static void canonical_sub_magnitude(struct decimal *r,
+#define canonical_sub_magnitude(r, a, b) \
+	THX_canonical_sub_magnitude(aTHX_ r, a, b)
+static void THX_canonical_sub_magnitude(pTHX_ struct decimal *r,
 	struct decimal *a, struct decimal *b)
 {
 	int carry;
@@ -320,7 +346,8 @@ static void canonical_sub_magnitude(struct decimal *r,
 	}
 }
 
-static void canonical_mul_value(struct decimal *r,
+#define canonical_mul_value(r, a, b) THX_canonical_mul_value(aTHX_ r, a, b)
+static void THX_canonical_mul_value(pTHX_ struct decimal *r,
 	struct decimal *a, struct decimal *b)
 {
 	STRLEN ali = a->int_end - a->int_start;
@@ -362,6 +389,18 @@ static void canonical_mul_value(struct decimal *r,
 }
 
 MODULE = Math::Decimal PACKAGE = Math::Decimal
+
+BOOT:
+	signum_sv[0] = newSVpvs("-1");
+	signum_sv[1] = newSVpvs("0");
+	signum_sv[2] = newSVpvs("1");
+	{
+		int i;
+		for(i = 3; i--; ) {
+			(void)SvIV(signum_sv[i]);
+			SvREADONLY_on(signum_sv[i]);
+		}
+	}
 
 bool
 is_dec_number(SV *arg)
@@ -419,7 +458,7 @@ PREINIT:
 	struct decimal a;
 CODE:
 	read_canonical(&a, a_sv);
-	RETVAL = newSVpvn(signum_string[1 + a.signum], a.signum==-1 ? 2 : 1);
+	RETVAL = SvREFCNT_inc(signum_sv[1 + a.signum]);
 OUTPUT:
 	RETVAL
 
@@ -445,7 +484,7 @@ CODE:
 	read_canonical(&a, a_sv);
 	read_canonical(&b, b_sv);
 	result = canonical_cmp_value(&a, &b);
-	RETVAL = newSVpvn(signum_string[1 + result], result==-1 ? 2 : 1);
+	RETVAL = SvREFCNT_inc(signum_sv[1 + result]);
 OUTPUT:
 	RETVAL
 
