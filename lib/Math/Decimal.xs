@@ -115,7 +115,7 @@ static SV *THX_canonical_write(pTHX_ struct decimal *r)
 {
 	STRLEN len;
 	char *p;
-	SV *r_sv = newSVpv("", 0);
+	SV *r_sv = newSVpvs("");
 	len = (r->signum == -1) +
 		(r->int_start==r->int_end ? 1 : r->int_end-r->int_start) +
 		(r->frac_start==r->frac_end ? 0 :
@@ -232,7 +232,7 @@ static void THX_canonical_add_magnitude(pTHX_ struct decimal *r,
 	STRLEN blf = b->frac_end - b->frac_start;
 	STRLEN rlf = alf > blf ? alf : blf;
 	STRLEN slf = alf < blf ? alf : blf;
-	SV *digstore = sv_2mortal(newSVpvn("", 0));
+	SV *digstore = sv_2mortal(newSVpvs(""));
 	r->int_start = SvGROW(digstore, rli+rlf+1);
 	SvCUR_set(digstore, rli+rlf);
 	r->frac_start = r->int_end = r->int_start + rli;
@@ -302,7 +302,7 @@ static void THX_canonical_sub_magnitude(pTHX_ struct decimal *r,
 	STRLEN blf = b->frac_end - b->frac_start;
 	STRLEN rlf = alf > blf ? alf : blf;
 	STRLEN slf = alf < blf ? alf : blf;
-	SV *digstore = sv_2mortal(newSVpvn("", 0));
+	SV *digstore = sv_2mortal(newSVpvs(""));
 	r->int_start = SvGROW(digstore, rli+rlf+1);
 	SvCUR_set(digstore, rli+rlf);
 	r->frac_start = r->int_end = r->int_start + rli;
@@ -354,7 +354,7 @@ static void THX_canonical_mul_value(pTHX_ struct decimal *r,
 	STRLEN bli = b->int_end - b->int_start;
 	STRLEN alf = a->frac_end - a->frac_start;
 	STRLEN blf = b->frac_end - b->frac_start;
-	SV *digstore = sv_2mortal(newSVpvn("", 0));
+	SV *digstore = sv_2mortal(newSVpvs(""));
 	char *ds, *de, *bp;
 	r->signum = a->signum == b->signum ? +1 : -1;
 	r->int_start = ds = SvGROW(digstore, ali+bli+alf+blf+1);
@@ -389,6 +389,8 @@ static void THX_canonical_mul_value(pTHX_ struct decimal *r,
 }
 
 MODULE = Math::Decimal PACKAGE = Math::Decimal
+
+PROTOTYPES: DISABLE
 
 BOOT:
 	signum_sv[0] = newSVpvs("-1");
@@ -559,7 +561,7 @@ CODE:
 			identity_canonical(&r);
 			RETVAL = canonical_write(&r);
 		} else {
-			RETVAL = newSVpvn("0", 1);
+			RETVAL = newSVpvs("0");
 		}
 	}
 OUTPUT:
@@ -574,6 +576,7 @@ CODE:
 	read_canonical(&a, a_sv);
 	read_canonical(&b, b_sv);
 	if(a.signum == 0) {
+		b.signum = -b.signum;
 		RETVAL = canonical_write(&b);
 	} else if(b.signum == 0) {
 		RETVAL = canonical_write(&a);
@@ -600,7 +603,7 @@ CODE:
 			identity_canonical(&r);
 			RETVAL = canonical_write(&r);
 		} else {
-			RETVAL = newSVpvn("0", 1);
+			RETVAL = newSVpvs("0");
 		}
 	}
 OUTPUT:
@@ -617,18 +620,18 @@ CODE:
 	read_canonical(&a, a_sv);
 	expt = canonical_get_expt(&a);
 	if(expt < 0) {
-		RETVAL = newSVpvn("", 0);
-		p = SvGROW(RETVAL, 3-expt);
-		SvCUR_set(RETVAL, 2-expt);
+		RETVAL = newSVpvs("");
+		p = SvGROW(RETVAL, (STRLEN)(3-expt));
+		SvCUR_set(RETVAL, (STRLEN)(2-expt));
 		p[0] = '0';
 		p[1] = '.';
 		memset(p+2, '0', -1-expt);
 		p[1-expt] = '1';
 		p[2-expt] = 0;
 	} else {
-		RETVAL = newSVpvn("", 0);
-		p = SvGROW(RETVAL, 2+expt);
-		SvCUR_set(RETVAL, 1+expt);
+		RETVAL = newSVpvs("");
+		p = SvGROW(RETVAL, (STRLEN)(2+expt));
+		SvCUR_set(RETVAL, (STRLEN)(1+expt));
 		p[0] = '1';
 		memset(p+1, '0', expt);
 		p[1+expt] = 0;
@@ -650,10 +653,10 @@ CODE:
 		RETVAL = canonical_write(&a);
 	} else if(expt < 0) {
 		struct decimal r;
-		SV *digstore = sv_2mortal(newSVpvn("", 0));
+		SV *digstore = sv_2mortal(newSVpvs(""));
 		STRLEN ali = a.int_end - a.int_start;
 		STRLEN alf = a.frac_end - a.frac_start;
-		STRLEN lx = ali >= -expt ? 0 : -expt - ali;
+		STRLEN lx = ali >= (STRLEN)-expt ? 0 : -expt - ali;
 		char *p;
 		p = SvGROW(digstore, lx+ali+alf+1);
 		SvCUR_set(digstore, lx+ali+alf);
@@ -669,10 +672,10 @@ CODE:
 		RETVAL = canonical_write(&r);
 	} else {
 		struct decimal r;
-		SV *digstore = sv_2mortal(newSVpvn("", 0));
+		SV *digstore = sv_2mortal(newSVpvs(""));
 		STRLEN ali = a.int_end - a.int_start;
 		STRLEN alf = a.frac_end - a.frac_start;
-		STRLEN lx = alf >= expt ? 0 : expt - alf;
+		STRLEN lx = alf >= (STRLEN)expt ? 0 : expt - alf;
 		char *p;
 		p = SvGROW(digstore, ali+alf+lx+1);
 		SvCUR_set(digstore, ali+alf+lx);

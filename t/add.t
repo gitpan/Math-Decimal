@@ -1,7 +1,7 @@
 use warnings;
 use strict;
 
-use Test::More tests => 14257;
+use Test::More tests => 16363;
 use t::NumForms qw(num_forms);
 
 BEGIN { $SIG{__WARN__} = sub { die "WARNING: $_[0]" }; }
@@ -16,6 +16,8 @@ foreach(
 	[qw( 1234     56    1290    )],
 	[qw(  123.4    5.6   129    )],
 	[qw(   12.34   0.56   12.9  )],
+	[qw(   -1      1       0    )],
+	[qw(   -1.3    1.3     0    )],
 	[qw( -123.4   -5.6  -129    )],
 	[qw(  123.4   -5.6   117.8  )],
 	[qw( -123.4    5.6  -117.8  )],

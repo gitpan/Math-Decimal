@@ -171,7 +171,7 @@ use strict;
 use Carp qw(croak);
 use Params::Classify 0.000 qw(is_string);
 
-our $VERSION = "0.002";
+our $VERSION = "0.003";
 
 use parent "Exporter";
 our @EXPORT_OK = qw(
@@ -274,7 +274,7 @@ satisfying the decimal number syntax.
 unless(defined &is_dec_number) { { local $SIG{__DIE__}; eval q{
 sub is_dec_number($) {
 	no warnings "utf8";
-	return &is_string && $_[0] =~ /\A$dec_number_rx\z/o;
+	return is_string($_[0]) && $_[0] =~ /\A$dec_number_rx\z/o;
 }
 }; } die $@ if $@ ne "" }
 
@@ -307,7 +307,7 @@ function.
 
 unless(defined &dec_canonise) { { local $SIG{__DIE__}; eval q{
 sub dec_canonise($) {
-	croak "not a decimal number" unless &is_string;
+	croak "not a decimal number" unless is_string($_[0]);
 	$_[0] =~ /\A(?:(-)|\+?)0*([1-9][0-9]*|0)(?:(\.[0-9]*[1-9])0*|\.0+|)\z/
 		or croak "not a decimal number";
 	my $num = (defined($1) ? $1 : "").$2.(defined($3) ? $3 : "");
@@ -341,7 +341,7 @@ foreach(@sgn_result) {
 
 unless(defined &dec_sgn) { { local $SIG{__DIE__}; eval q{
 sub dec_sgn($) {
-	croak "not a decimal number" unless &is_string;
+	croak "not a decimal number" unless is_string($_[0]);
 	$_[0] =~ /\A(?:(-)|\+?)0*(?:0(?:\.0+)?()|[0-9]+(?:\.[0-9]+)?)\z/
 		or croak "not a decimal number";
 	return $sgn_result[defined($2) ? 1 : defined($1) ? 0 : 2];
@@ -356,7 +356,7 @@ Absolute value (magnitude, discarding sign).
 
 unless(defined &dec_abs) { { local $SIG{__DIE__}; eval q{
 sub dec_abs($) {
-	croak "not a decimal number" unless &is_string;
+	croak "not a decimal number" unless is_string($_[0]);
 	my $a = $_[0];
 	$a =~ s/\A-(?=[0-9])//;
 	return dec_canonise($a);
@@ -548,7 +548,7 @@ C<die>s if I<A> is too large for Perl to handle the result.
 unless(defined(&dec_pow10) && defined(&dec_mul_pow10)) {
 				{ local $SIG{__DIE__}; eval q{
 sub _parse_expt($) {
-	croak "not a decimal number" unless &is_string;
+	croak "not a decimal number" unless is_string($_[0]);
 	my($pneg, $pi, $pbadf) =
 		($_[0] =~ /\A(?:(-)|\+?)
 			   0*(0|[1-9][0-9]*)
@@ -817,7 +817,7 @@ Andrew Main (Zefram) <zefram@fysh.org>
 
 =head1 COPYRIGHT
 
-Copyright (C) 2009, 2010 Andrew Main (Zefram) <zefram@fysh.org>
+Copyright (C) 2009, 2010, 2011 Andrew Main (Zefram) <zefram@fysh.org>
 
 =head1 LICENSE
 

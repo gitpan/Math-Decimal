@@ -1,7 +1,7 @@
 use warnings;
 use strict;
 
-use Test::More tests => 5509;
+use Test::More tests => 5995;
 use t::NumForms qw(num_forms);
 
 BEGIN { $SIG{__WARN__} = sub { die "WARNING: $_[0]" }; }
@@ -11,6 +11,7 @@ BEGIN { use_ok "Math::Decimal", qw(dec_mul); }
 foreach(
 	[qw(    0      0       0    )],
 	[qw(    0      2.7     0    )],
+	[qw(    0     -2.7     0    )],
 	[qw(    1      2.7     2.7  )],
 	[qw(   -2.55   2      -5.1  )],
 	[qw(  123    456   56088    )],
